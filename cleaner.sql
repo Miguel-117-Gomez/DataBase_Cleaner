@@ -927,3 +927,34 @@ INSERT INTO pago VALUES (28,'PayPal','ak-std-000022','2009-01-13',8489);
 INSERT INTO pago VALUES (30,'PayPal','ak-std-000024','2009-01-16',7863);
 INSERT INTO pago VALUES (35,'PayPal','ak-std-000025','2007-10-06',3321);
 INSERT INTO pago VALUES (38,'PayPal','ak-std-000026','2006-05-26',1171);
+
+SELECT o.codigo_oficina as cod_oficina, o.ciudad country 
+concat(o.codigo_oficina,' - ', o.ciudad) as cod_ciudad_oficina
+from oficina o;
+
+SELECT sum(TABLA2.TOTAL_REGISTROS) SUMA_REGISTROS,
+GROUP_CONCAT(TABLA2.CIUDAD ORDER BY TABLA2.CIUDAD SEPARATOR ';') LISTA_CIUDAD
+FROM (SELECT tabla.ciudad, cast(tabla.TOTAL_REGISTROS as signed) TOTAL_REGISTROS
+from (SELECT cl.ciudad, count(*) TOTAL_REGISTROS
+from cliente cl, empleado em
+where em.codigo_empleado = cl.codigo_empleado_rep_ventas
+and em.codigo_empleado in (11,30)
+group by cl.ciudad) tabla
+union
+SELECT ('Barcelona') ciudad, (10) TOTAL_REGISTROS from dual) TABLA2;
+
+SELECT cl.ciudad, count(*) TOTAL_REGISTROS,
+LPAD(count(*),8,'0') TOTAL_REGISTROS, RPAD(count(*),8,'0') TOTAL_REGISTROS
+from cliente cl, empleado em
+where em.codigo_empleado = cl.codigo_empleado_rep_ventas
+and em.codigo_empleado in (11,30)
+group by cl.ciudad
+
+select ciudad, telefono, pais from oficina 
+WHERE upper(pais) = 'ESPAÑA'
+
+SELECT cl.ciudad, em.codigo_empleado from cliente claras
+join empleado em
+on em.codigo_empleado = cl.codigo_empleado_rep_ventas
+where upper(cl.ciudad) = 'MADRID'
+and em.codigo_empleado = 11 or em.codigo_empleado = 30;
